@@ -1,6 +1,6 @@
 import axios from "axios";
 import utility from "./utility";
-const BASE_URL = process.env.NODE_ENV === 'development' ? '': '../portal/'
+const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://diary.server.h/portal/': '/portal/'
 
 
 function request(method, params, requestData = {}, url, timeout = 30000) {

@@ -2,7 +2,7 @@
     <!-- 服务器错误 -->
     <div class="server-error" :style="`height: ${height}px`">
         <div class="logo-server-error">
-            <img src="../assets/img/logo/logo_server_error.svg" alt="logo error">
+            <img :src="icons.logoIcon.logoServerError" alt="logo error">
         </div>
         <div class="server-error-title">遇到错误，请尝试刷新页面。如果还不行，请联系管理员</div>
         <div class="server-error-title">
@@ -14,11 +14,13 @@
 
 <script>
 import projectConfig from "../projectConfig"
+import svgIcons from "@/assets/img/SvgIcons";
 
 export default {
     name: "ServerError",
     data(){
         return {
+            icons: svgIcons,
             height: 800,
             adminEmail: projectConfig.adminEmail
         }

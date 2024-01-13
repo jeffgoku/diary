@@ -1,7 +1,7 @@
 <template>
     <div class="about" :style="'height:' + insets.heightPanel + 'px'">
         <div class="logo">
-            <img src="../../assets/img/logo/logo_login.svg" alt="LOGO">
+            <img :src="icons.logoIcons.login" alt="LOGO">
         </div>
         <h3 class="title">{{nameZh}}</h3>
         <h4 class="subtitle">{{description}}</h4>
@@ -20,6 +20,7 @@
 <script>
 import {mapState} from "vuex"
 import packageInfo from "../../../package.json"
+import svgIcons from "@/assets/img/SvgIcons";
 
 export default {
     name: "About",
@@ -28,6 +29,7 @@ export default {
     },
     data(){
         return {
+            icons: svgIcons,
             version: packageInfo.version,
             dateModify: packageInfo.dateModify,
             dateInit: packageInfo.dateInit,

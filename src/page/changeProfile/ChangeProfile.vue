@@ -8,7 +8,7 @@
                 <div class="logo-wrapper mb-6">
                     <label class="logo avatar" for="avatar">
                         <img v-if="formUser.avatar" :src="formUser.avatar + '-' + QiniuStyleSuffix || icons.logoIcon.changeAvatar" alt="Diary Logo">
-                        <img v-else src="../../assets/img/logo/logo_avatar.svg" alt="Avatar">
+                        <img v-else :src="icons.logoIcon.ChangeAvatar" alt="Avatar">
                     </label>
                     <input type="file" @change="uploadAvatar" id="avatar">
                 </div>
@@ -62,7 +62,6 @@ import {mapState} from "vuex"
 import SvgIcons from "../../assets/img/SvgIcons"
 import utility from "../../utility"
 import fileApi from "../../api/fileApi";
-import * as qiniu from 'qiniu-js'
 import projectConfig from "../../projectConfig";
 import axios from "axios";
 
@@ -160,8 +159,6 @@ export default {
                                 this.formUser.avatar = projectConfig.QiniuImgBaseURL + res.key
                             }
                         }
-                        const observable = qiniu.upload(this.avatarFile, null, res.data, {}, {})
-                        const subscription = observable.subscribe(observer) // 上传开始
                         // subscription.unsubscribe() // 上传取消
                     })
                     .catch(err => {
