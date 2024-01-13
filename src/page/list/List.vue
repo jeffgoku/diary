@@ -50,6 +50,15 @@ import diaryApi from "../../api/diaryApi"
 import SvgIcons from "../../assets/img/SvgIcons"
 import ListHeader from "../../page/list/ListHeader"
 
+const params = {
+    keywords: [],
+    pageNo: 1,
+    pageSize: 100, // 单页请求条数
+    categories: [],
+    filterShared: 0, // 1 是筛选，0 是不筛选
+    dateFilter: '' // 日记年月筛选
+}
+
 export default {
     name: 'List',
     data() {
@@ -62,14 +71,6 @@ export default {
 
             keywordShow: '', // 关键词
 
-            params: {
-                keywords: [],
-                pageNo: 1,
-                pageSize: 100, // 单页请求条数
-                categories: [],
-                filterShared: 0, // 1 是筛选，0 是不筛选
-                dateFilter: '' // 日记年月筛选
-            },
             diaries: [],
             diariesShow: [],
         }
@@ -243,8 +244,8 @@ export default {
             this.search()
         },
         reload() {
-            this.params.pageNo = 1
-            this.params.keywords = JSON.stringify(this.keywords)
+            params.pageNo = 1
+            params.keywords = JSON.stringify(this.keywords)
             this.diaries = []
             this.diariesShow = []
             this.loadMore()
@@ -254,12 +255,12 @@ export default {
         loadMore() {
             this.isHasMore = false
             this.isLoading = true
-            this.params.categories = JSON.stringify(utility.getDiaryConfig().filteredCategories)
-            this.params.dateFilter = utility.getDiaryConfig().dateFilter
-            this.params.filterShared = utility.getDiaryConfig().isFilterShared ? 1 : 0
-            this.getDiaries(this.params)
+            params.categories = JSON.stringify(utility.getDiaryConfig().filteredCategories)
+            params.dateFilter = utility.getDiaryConfig().dateFilter
+            params.filterShared = utility.getDiaryConfig().isFilterShared ? 1 : 0
+            this.getDiaries()
         },
-        getDiaries(params) {
+        getDiaries() {
             diaryApi
                 .list(params)
                 .then(res => {
@@ -274,9 +275,9 @@ export default {
                     })
 
                     // page operation
-                    if (res.data.length === this.params.pageSize) {
+                    if (res.data.length === params.pageSize) {
                         this.isHasMore = true
-                        this.params.pageNo++
+                        params.pageNo++
                     } else {
                         this.isHasMore = false
                     }

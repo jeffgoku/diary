@@ -84,6 +84,7 @@ export default {
                 .catch(err => {
                     this.isServerError = true
                     console.log('服务器错误，请联系管理员')
+                    console.log(err);
                 })
         },
     }

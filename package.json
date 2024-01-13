@@ -14,41 +14,29 @@
   },
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --mode develop",
-    "build": "vue-cli-service build --mode production"
+    "dev": "vite",
+    "build": "vite build"
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^3.3.1",
     "axios": "^1.2.1",
     "clipboard": "^2.0.11",
-    "core-js": "^3.26.1",
     "echarts": "^5.3.2",
     "floating-vue": "^2.0.0-beta.20",
     "js-calendar-converter": "^0.0.6",
     "marked": "^4.2.4",
     "moment": "^2.29.4",
-    "qiniu-js": "^3.4.1",
     "register-service-worker": "^1.7.2",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~5.0.8",
-    "@vue/cli-plugin-pwa": "~5.0.8",
-    "@vue/cli-plugin-router": "~5.0.8",
-    "@vue/cli-plugin-vuex": "~5.0.8",
-    "@vue/cli-service": "~5.0.8",
+    "@vitejs/plugin-vue": "^4.5.2",
     "fiber": "^1.0.4",
-    "sass": "^1.56.2",
-    "sass-loader": "^13.2.0",
-    "vue-template-compiler": "^2.7.14",
-    "filemanager-webpack-plugin": "^8.0.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "filemanager-webpack-plugin": "^8.0.0",
+    "sass": "^1.69.7",
+    "vite": "^5.0.10"
   },
   "browserslist": [
     "> 1%",

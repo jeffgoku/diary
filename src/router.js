@@ -1,27 +1,16 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Index from "./framework/Index";
-import Hole from "./framework/Hole";
+import Index from "./framework/Index.vue";
 import utility from "./utility";
 
-import Register from "./page/login&register/Register"
-import Login from "./page/login&register/Login.vue"
-import ChangePassword from "./page/login&register/ChangePassword.vue"
-import ChangeProfile from "./page/changeProfile/ChangeProfile.vue"
-import Bill from "./page/bill/Bill"
-import BankCardList from "./page/bankCard/BankCardList"
-import InvitationList from "./page/invitation/InvitationList.vue"
-import Share from "./page/share/Share"
-import Statistics from "./page/statistics/StatisticsMain"
+import List from "@/page/list/List.vue"
+import Detail from "@/page/detail/detail.vue"
+import Edit from "@/page/edit/Edit.vue"
 
-import List from "./page/list/List"
-import Detail from "./page/detail/Detail"
-import Edit from "./page/edit/Edit"
-import NotFound_404 from "./fundation/NotFound_404";
-import ListHole from "./page/listHole/ListHole";
-import store from './store'
-import ClearDiary from "@/page/others/ClearDiary";
-import DestroyAccount from "@/page/others/DestroyAccount";
-import FileManager from "./page/fileManager/FileManager.vue";
+
+import Bill from "@/page/bill/Bill.vue"
+import NotFound from "@/fundation/NotFound_404.vue"
+
+
 const routes = [
     {
         name: 'Index',
@@ -37,24 +26,24 @@ const routes = [
     {
         name: 'Hole',
         path: '/hole',
-        component: Hole ,
+        component: () => import("@/page/bankCard/BankCardList.vue"),
         children: [
-            {name: 'ListHole'   , path: 'list'      ,        component: ListHole}, // mobile
+            {name: 'ListHole'   , path: 'list'      ,        component: () => import("@/page/listHole/ListHole.vue")}, // mobile
         ]
     },
-    {name: 'Register',       path: '/register',          component: Register},
-    {name: 'Share',          path: '/share/:id',         component: Share},
-    {name: 'ClearDiary',     path: '/clear-diary',       component: ClearDiary },
-    {name: 'DestroyAccount', path: '/destroy-account',   component: DestroyAccount },
-    {name: 'ChangePassword', path: '/change-password',   component: ChangePassword },
-    {name: 'ChangeProfile',  path: '/change-profile',    component: ChangeProfile },
-    {name: 'Login',          path: '/login',             component: Login},
-    {name: 'Statistics',     path: '/statistics',        component: Statistics},
-    {name: 'FileManager',    path: '/file-manager',      component: FileManager},
-    {name: 'Bill',           path: '/bill',              component: Bill},
-    {name: 'BankCard',       path: '/bank-card',         component: BankCardList },
-    {name: 'Invitation',     path: '/invitation',        component: InvitationList },
-    {name: 'NotFound',       path: '/:pathMatch(.*)*',   component: NotFound_404}
+    {name: 'Register',       path: '/register',          component: () => import("@/page/login&register/Register.vue") },
+    {name: 'Share',          path: '/share/:id',         component: () => import("@/page/share/Share.vue") },
+    {name: 'ClearDiary',     path: '/clear-diary',       component: () => import("@/page/others/ClearDiary.vue") },
+    {name: 'DestroyAccount', path: '/destroy-account',   component: () => import("@/page/others/DestroyAccount.vue") },
+    {name: 'ChangePassword', path: '/change-password',   component: () => import("@/page/login&register/ChangePassword.vue") },
+    {name: 'ChangeProfile',  path: '/change-profile',    component: () => import("@/page/changeProfile/ChangeProfile.vue") },
+    {name: 'Login',          path: '/login',             component: () => import("@/page/login&register/Login.vue") },
+    {name: 'Statistics',     path: '/statistics',        component: () => import("@/page/statistics/StatisticsMain.vue")},
+    {name: 'FileManager',    path: '/file-manager',      component: () => import("@/page/fileManager/FileManager.vue") },
+    {name: 'Bill',           path: '/bill',              component: Bill },
+    {name: 'BankCard',       path: '/bank-card',         component: () => import("@/page/bankCard/BankCardList.vue") },
+    {name: 'Invitation',     path: '/invitation',        component: () => import("@/page/invitation/InvitationList.vue") },
+    {name: 'NotFound',       path: '/:pathMatch(.*)*',   component: NotFound }
 ]
 
 
@@ -74,7 +63,8 @@ router.beforeEach((to, from, next) => {
             next()
             break
         default:
-            if (utility.getAuthorization() && utility.getAuthorization().email){
+            let auth = utility.getAuthorization()
+            if (auth && auth.email) {
                 if (to.name === 'List'){
                     if (store.getters.isInMobileMode){
                         next()

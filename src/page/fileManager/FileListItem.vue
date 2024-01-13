@@ -68,7 +68,7 @@ export default {
     emits: ['refreshList'],
     computed: {
         filePath(){
-            return `https://kylebing.cn/${this.fileInfo.path}`
+            return `/${this.fileInfo.path}`
         }
     },
     data(){

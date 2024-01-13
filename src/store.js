@@ -43,8 +43,6 @@ export default createStore({
 
         // BILL
         moneyAccuracy: 1, // 展示的货币精度，小数位数
-
-
     },
     getters: {
         isInMobileMode(state){
