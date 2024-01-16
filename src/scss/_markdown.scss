@@ -87,6 +87,12 @@ $gap-small: 8px;
         @include border-radius(2px);
     }
 
+    strong {
+        font-family: 'Galvji';
+        color: black;
+    }
+
+
     table{
         margin-bottom: $gap;
         border: 1px solid $color-border;
