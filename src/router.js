@@ -54,30 +54,27 @@ const router = createRouter({
 
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
     switch (to.name){
         case 'Login':
         case 'Register':
         case 'Share':
         case 'Invitation':
-            next()
             break
         default:
             let auth = utility.getAuthorization()
             if (auth && auth.email) {
                 if (to.name === 'List'){
                     if (store.getters.isInMobileMode){
-                        next()
+                        break
                     } else {
-                        next({name: 'EditNew'})
+                        return 'EditNew'
                     }
                 } else {
-                    next()
+                    break
                 }
             } else {
-                next({
-                    name: 'Login'
-                })
+                return 'Login'
             }
             break
     }

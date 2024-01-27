@@ -11,9 +11,10 @@ function request(method, params, requestData = {}, url, timeout = 30000) {
     * 给 requestData 添加 authorization 内部的数据： username email uid 等等
     * */
     if (url !== 'user/login' && url !== 'user/register'){ // 注册和登录时不添加 Token 数据
+        let auth = utility.getAuthorization()
         Object.assign(headers, {
-            'Diary-Token':  utility.getAuthorization() && utility.getAuthorization().token,
-            'Diary-Uid':  utility.getAuthorization() && utility.getAuthorization().uid
+            'Diary-Token':  auth && auth.token,
+            'Diary-Uid':  auth && auth.uid
         })
     }
 
@@ -30,6 +31,11 @@ function request(method, params, requestData = {}, url, timeout = 30000) {
             .then(res => {
                 if (res.status === 200) {
                     if (res.data.success){
+                        let newToken = res.headers.get('X-Refreshed-Token')
+                        if(newToken)
+                        {
+                            utility.setAuthorizationToken(newToken)
+                        }
                         resolve(res.data)
                     } else {
                         console.log('request err: ', res.data) // 输出错误信息

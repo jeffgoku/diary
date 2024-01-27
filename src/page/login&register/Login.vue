@@ -34,8 +34,6 @@
                     </p>
                 </div>
             </div>
-
-
         </transition>
     </div>
 </template>

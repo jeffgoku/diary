@@ -1,6 +1,6 @@
 <template>
-    <router-view v-if="categoryAll.length > 0"/>
     <server-error v-if="isServerError"/>
+    <router-view v-else/>
 </template>
 <script>
 import {mapGetters, mapMutations, mapState} from "vuex"
@@ -82,9 +82,15 @@ export default {
                     this.SET_CATEGORY_ALL(res.data)
                 })
                 .catch(err => {
-                    this.isServerError = true
-                    console.log('服务器错误，请联系管理员')
-                    console.log(err);
+                    if (err.response.status == 401)
+                    {
+                        this.$router.push('Login')
+                    }
+                    else
+                    {
+                        this.isServerError = true
+                        console.log(err);
+                    }
                 })
         },
     }

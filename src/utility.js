@@ -13,6 +13,12 @@ function setAuthorization(nickname, uid, email, phone, avatar, token, group_id, 
    }))
 }
 
+function setAuthorizationToken(token) {
+   let auth = getAuthorization()
+   auth.token = token
+   localStorage.setItem(AUTHORIZATION_NAME, JSON.stringify(auth))
+}
+
 /**
  * 保存账单常用项目列表
  * @param keyArray
@@ -213,6 +219,7 @@ export default {
    WEEKDAY, WEATHER,
    getAuthorization,
    setAuthorization,
+   setAuthorizationToken,
    popMessage,
    dateProcess,
    dateFormatter,
