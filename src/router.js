@@ -68,15 +68,14 @@ router.beforeEach((to, from) => {
                     if (store.getters.isInMobileMode){
                         break
                     } else {
-                        return 'EditNew'
+                        return {name:'EditNew'}
                     }
                 } else {
                     break
                 }
             } else {
-                return 'Login'
+                return {name:'Login'}
             }
-            break
     }
 })
 

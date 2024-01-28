@@ -12,6 +12,14 @@ export default defineConfig({
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },
+  server: {
+    proxy: {
+      '/portal': {
+        target: "http://localhost:3000",
+        rewrite: (path) => path.replace(/^\/portal/, ''),
+      }
+    }
+  },
   build: {
     rollupOptions: {
       output: {

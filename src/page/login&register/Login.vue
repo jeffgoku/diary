@@ -53,7 +53,6 @@ export default {
             icons: SvgIcons,
             show: false,
             labelEmail: "邮箱",
-            labelCheckPassword: "再次确认密码",
             email: "",
             password: "",
             loginLabel: '登录',
@@ -97,7 +96,7 @@ export default {
                             res.data.email,
                             res.data.phone,
                             res.data.avatar,
-                            res.data.password,
+                            res.data.token,
                             res.data.group_id,
                             res.data.city,
                             res.data.geolocation,
@@ -114,8 +113,6 @@ export default {
                             this.loginLabel = '登录'
                         }, 5)
                     })
-            } else {
-
             }
         },
 

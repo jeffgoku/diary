@@ -30,6 +30,7 @@ export default {
             default: '℃'
         }
     },
+    emits: ['update:modelValue'],
     mounted() {
         this.$nextTick(_=> {
             if (this.modelValue === ''){
@@ -87,14 +88,11 @@ export default {
         }
     },
     watch:{
-        modelValue(newValue){
-            if (newValue === ''){
-                this.temperatureLocal = ''
-            } else {
-                this.temperatureLocal = Number(newValue)
-            }
-        },
         temperatureLocal(newValue){
+            if (isNaN(parseInt(newValue)))
+            {
+                return
+            }
             this.$emit('update:modelValue', String(newValue))
         }
     }

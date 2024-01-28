@@ -1,7 +1,7 @@
 <template>
     <div class="about" :style="'height:' + insets.heightPanel + 'px'">
         <div class="logo">
-            <img :src="icons.logoIcons.login" alt="LOGO">
+            <img :src="icons.logoIcon.login" alt="LOGO">
         </div>
         <h3 class="title">{{nameZh}}</h3>
         <h4 class="subtitle">{{description}}</h4>

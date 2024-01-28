@@ -18,17 +18,21 @@ export default {
         // 日记项目载入后，隐藏 preloading
         document.querySelector('.preloading').style.display = 'none'
 
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            this.SET_COLOR_MODE('dark')
-        } else {
-            this.SET_COLOR_MODE('light')
-        }
+        if(window.matchMedia)
+        {
+            let colorSchemeMatch = window.matchMedia('(prefers-color-scheme: dark)')
 
-        // 颜色模式监听
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            const newColorScheme = event.matches ? "dark" : "light"
-            this.SET_COLOR_MODE('newColorScheme')
-        })
+            if (colorSchemeMatch.matches) {
+                this.SET_COLOR_MODE('dark')
+            } else {
+                this.SET_COLOR_MODE('light')
+            }
+
+            // 颜色模式监听
+            colorSchemeMatch.addEventListener('change', event => {
+                this.SET_COLOR_MODE(event.matches ? "dark" : "light")
+            })
+        }
     },
     mounted() {
         this.getCategoryAll()
@@ -93,6 +97,11 @@ export default {
                     }
                 })
         },
+    },
+    errorCaptured(err, component, info) {
+        console.log(`err ${err} happen for ${component?.name ?? "Unknown component"} : ${info}`)
+        this.isServerError = true
+        return false
     }
 }
 </script>
