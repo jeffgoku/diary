@@ -307,7 +307,7 @@ export default {
                     // console.clear()
                     // window.console.log(`${lastOffsetTop} | ${clientHeight} | ${scrollTop}`)
                     // 当 list 滚动到上面的部分 + 屏幕高度 >  最后一个元素的 offsetTop 的时候，就说明已经触底了
-                    return (lastOffsetTop < clientHeight + scrollTop + innerHeight) // 添加 100% 触发高度
+                    return (lastOffsetTop < clientHeight + scrollTop) // 添加 100% 触发高度
                 }
 
                 if (this.isHasMore && needLoadContent()) {

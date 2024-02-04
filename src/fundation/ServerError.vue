@@ -5,6 +5,7 @@
             <img :src="icons.logoIcon.logoServerError" alt="logo error">
         </div>
         <div class="server-error-title">遇到错误，请尝试刷新页面。如果还不行，请联系管理员</div>
+        <div class="server-error-title">{{errorMsg}}</div>
         <div class="server-error-title">
             <a :href="`mailto:${ adminEmail }`">{{ adminEmail }}</a>
         </div>
@@ -18,6 +19,7 @@ import svgIcons from "@/assets/img/SvgIcons";
 
 export default {
     name: "ServerError",
+    props: ['errorMsg'],
     data(){
         return {
             icons: svgIcons,

@@ -1,17 +1,15 @@
 <template>
-    <server-error v-if="isServerError"/>
+    <server-error v-if="isServerError" :error-msg="isServerError"/>
     <router-view v-else/>
 </template>
 <script>
-import {mapGetters, mapMutations, mapState} from "vuex"
-import utility from "./utility"
-import diaryApi from "./api/diaryApi"
+import { mapMutations } from "vuex"
 import ServerError from "./fundation/ServerError.vue";
 export default {
     components: {ServerError},
     data(){
         return {
-            isServerError: false, // 服务器无法请求时
+            isServerError: '', // 服务器无法请求时
         }
     },
     created() {
@@ -34,73 +32,12 @@ export default {
             })
         }
     },
-    mounted() {
-        this.getCategoryAll()
-        // 初始化 LocalStorage 存储对象
-        let diaryConfig = utility.getDiaryConfig()
-        this.SET_FILTERED_CATEGORIES(diaryConfig.filteredCategories)
-        this.SET_KEYWORD(diaryConfig.keywords)
-        this.SET_DATE_FILTER(diaryConfig.dateFilter)
-        this.SET_IS_FILTER_SHARED(diaryConfig.isFilterShared)
-
-        window.onresize = () => {
-            this.SET_INSETS({
-                windowsHeight: document.documentElement.clientHeight,
-                windowsWidth: document.documentElement.clientWidth,
-                heightPanel: document.documentElement.clientHeight - 45, // 除 navbar 的高度
-            })
-            if (this.isInMobileMode){
-
-            } else {
-                if (this.$route.name === 'List'){
-                    this.$router.push({
-                        name: 'EditNew'
-                    })
-                }
-            }
-        }
-
-        // 旧版本数据清除
-        if (diaryConfig.hasOwnProperty('keyword')){ // keyword 是旧版数据，已改为 keywords: []
-            utility.deleteDiaryConfig()
-        }
-    },
-    computed: {
-        ...mapState(['categoryAll']),
-        ...mapGetters(['isInMobileMode']),
-    },
     methods: {
-        ...mapMutations([
-            'SET_INSETS',
-            'SET_COLOR_MODE',
-            'SET_KEYWORD',
-            'SET_DATE_FILTER',
-            'SET_FILTERED_CATEGORIES',
-            'SET_CATEGORY_ALL',
-            'SET_IS_FILTER_SHARED'
-        ]),
-        getCategoryAll() {
-            diaryApi
-                .categoryAllGet()
-                .then(res => {
-                    this.SET_CATEGORY_ALL(res.data)
-                })
-                .catch(err => {
-                    if (err.response.status == 401)
-                    {
-                        this.$router.push('Login')
-                    }
-                    else
-                    {
-                        this.isServerError = true
-                        console.log(err);
-                    }
-                })
-        },
+        ...mapMutations(['SET_COLOR_MODE'])
     },
     errorCaptured(err, component, info) {
+        this.isServerError = 'error happened'
         console.log(`err ${err} happen for ${component?.name ?? "Unknown component"} : ${info}`)
-        this.isServerError = true
         return false
     }
 }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import store from "@/store"
 import Index from "./framework/Index.vue";
 import utility from "./utility";
 

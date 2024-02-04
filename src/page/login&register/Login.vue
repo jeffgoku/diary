@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import userApi from "../../api/userApi"
-import utility from "../../utility"
+import userApi from "@/api/userApi"
+import billApi from "@/api/billApi";
+import utility from "@/utility"
 import {mapState} from "vuex"
-import SvgIcons from "../../assets/img/SvgIcons"
+import SvgIcons from "@/assets/img/SvgIcons"
 import projectConfig from "@/projectConfig";
 import packageInfo from "../../../package.json"
-import billApi from "../../api/billApi";
 export default {
     name: "Login",
     data() {
@@ -179,10 +179,6 @@ export default {
     }
     .project-name{
         font-weight: bold;
-    }
-    .valid-date{
-    }
-    .version{
     }
 }
 </style>

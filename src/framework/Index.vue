@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <ServerError v-if="haveErr" :errorMsg="haveErr"/>
+    <div v-else>
         <navbar/>
 
         <!-- 竖屏时 -->
@@ -23,23 +24,60 @@
 </template>
 
 <script>
-import List from "../page/list/List"
+import List from "@/page/list/List"
 import Navbar from "./navbar/Navbar"
 import {mapGetters, mapMutations, mapState} from 'vuex'
-import statisticApi from "../api/statisticApi";
+import statisticApi from "@/api/statisticApi"
+import ServerError from "@/fundation/ServerError.vue"
+import utility from "@/utility"
+import diaryApi from "@/api/diaryApi"
 
 export default {
     name: 'Index',
     components: {
         Navbar,
-        List
+        List,
+        ServerError,
+    },
+    data() {
+        return {
+            haveErr: ''
+        }
     },
     computed: {
         ...mapState(['insets', 'isShowSearchBar']),
         ...mapGetters(['isInMobileMode', 'categoryNameMap'])
     },
     mounted() {
-        console.log('$route.path: ',this.$route.path)
+        this.getCategoryAll()
+        // 初始化 LocalStorage 存储对象
+        let diaryConfig = utility.getDiaryConfig()
+        this.SET_FILTERED_CATEGORIES(diaryConfig.filteredCategories)
+        this.SET_KEYWORD(diaryConfig.keywords)
+        this.SET_DATE_FILTER(diaryConfig.dateFilter)
+        this.SET_IS_FILTER_SHARED(diaryConfig.isFilterShared)
+
+        window.onresize = () => {
+            this.SET_INSETS({
+                windowsHeight: document.documentElement.clientHeight,
+                windowsWidth: document.documentElement.clientWidth,
+                heightPanel: document.documentElement.clientHeight - 45, // 除 navbar 的高度
+            })
+            if (this.isInMobileMode){
+
+            } else {
+                if (this.$route.name === 'List'){
+                    this.$router.push({
+                        name: 'EditNew'
+                    })
+                }
+            }
+        }
+
+        // 旧版本数据清除
+        if (diaryConfig.hasOwnProperty('keyword')){ // keyword 是旧版数据，已改为 keywords: []
+            utility.deleteDiaryConfig()
+        }
         if(this.$route.path === '/' || this.$route.path === undefined){
             if (this.isInMobileMode){
                 this.$router.push({name: 'List'})
@@ -66,7 +104,13 @@ export default {
             'SET_STATISTICS_YEAR',
             'SET_DATA_ARRAY_CATEGORY',
             'SET_DATA_ARRAY_YEAR',
+            'SET_FILTERED_CATEGORIES',
+
+            'SET_INSETS',
             'SET_CATEGORY_ALL',
+            'SET_KEYWORD',
+            'SET_DATE_FILTER',
+            'SET_IS_FILTER_SHARED',
         ]),
         // 获取日记统计信息
         getStatistic() {
@@ -104,7 +148,25 @@ export default {
                 }
             })
             this.SET_DATA_ARRAY_CATEGORY(data)
-        }
+        },
+        getCategoryAll() {
+            diaryApi
+                .categoryAllGet()
+                .then(res => {
+                    this.SET_CATEGORY_ALL(res.data)
+                })
+                .catch(err => {
+                    if (err.response.status == 401)
+                    {
+                        this.$router.push('/login')
+                    }
+                    else
+                    {
+                        this.haveErr = 'error happened'
+                        console.log(err);
+                    }
+                })
+        },
     }
 }
 
