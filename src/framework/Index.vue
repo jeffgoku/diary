@@ -1,6 +1,6 @@
 <template>
     <ServerError v-if="haveErr" :errorMsg="haveErr"/>
-    <div v-else>
+    <div v-else-if="authorized">
         <navbar/>
 
         <!-- 竖屏时 -->
@@ -41,7 +41,8 @@ export default {
     },
     data() {
         return {
-            haveErr: ''
+            haveErr: '',
+            authorized: false,
         }
     },
     computed: {
@@ -49,44 +50,63 @@ export default {
         ...mapGetters(['isInMobileMode', 'categoryNameMap'])
     },
     mounted() {
-        this.getCategoryAll()
-        // 初始化 LocalStorage 存储对象
-        let diaryConfig = utility.getDiaryConfig()
-        this.SET_FILTERED_CATEGORIES(diaryConfig.filteredCategories)
-        this.SET_KEYWORD(diaryConfig.keywords)
-        this.SET_DATE_FILTER(diaryConfig.dateFilter)
-        this.SET_IS_FILTER_SHARED(diaryConfig.isFilterShared)
-
-        window.onresize = () => {
-            this.SET_INSETS({
-                windowsHeight: document.documentElement.clientHeight,
-                windowsWidth: document.documentElement.clientWidth,
-                heightPanel: document.documentElement.clientHeight - 45, // 除 navbar 的高度
-            })
-            if (this.isInMobileMode){
-
-            } else {
-                if (this.$route.name === 'List'){
-                    this.$router.push({
-                        name: 'EditNew'
-                    })
+        diaryApi
+            .categoryAllGet()
+            .then(res => {
+                this.authorized = true;
+                if (res == null)
+                {
+                    return;
                 }
-            }
-        }
+                this.SET_CATEGORY_ALL(res.data)
+                // 日记项目载入后，隐藏 preloading
+                document.querySelector('.preloading').style.display = 'none'
 
-        // 旧版本数据清除
-        if (diaryConfig.hasOwnProperty('keyword')){ // keyword 是旧版数据，已改为 keywords: []
-            utility.deleteDiaryConfig()
-        }
-        if(this.$route.path === '/' || this.$route.path === undefined){
-            if (this.isInMobileMode){
-                this.$router.push({name: 'List'})
-            } else {
-                this.$router.push({name: 'EditNew'})
-            }
-        }
+                // 初始化 LocalStorage 存储对象
+                let diaryConfig = utility.getDiaryConfig()
+                this.SET_FILTERED_CATEGORIES(diaryConfig.filteredCategories)
+                this.SET_KEYWORD(diaryConfig.keywords)
+                this.SET_DATE_FILTER(diaryConfig.dateFilter)
+                this.SET_IS_FILTER_SHARED(diaryConfig.isFilterShared)
 
-        this.getStatistic() // 载入统计信息
+                window.onresize = () => {
+                    this.SET_INSETS({
+                        windowsHeight: document.documentElement.clientHeight,
+                        windowsWidth: document.documentElement.clientWidth,
+                        heightPanel: document.documentElement.clientHeight - 45, // 除 navbar 的高度
+                    })
+                    if (this.isInMobileMode){
+
+                    } else {
+                        if (this.$route.name === 'List'){
+                            this.$router.push({
+                                name: 'EditNew'
+                            })
+                        }
+                    }
+                }
+
+                // 旧版本数据清除
+                if (diaryConfig.hasOwnProperty('keyword')){ // keyword 是旧版数据，已改为 keywords: []
+                    utility.deleteDiaryConfig()
+                }
+                if(this.$route.path === '/' || this.$route.path === undefined){
+                    if (this.isInMobileMode){
+                        this.$router.push({name: 'List'})
+                    } else {
+                        this.$router.push({name: 'EditNew'})
+                    }
+                }
+
+                this.getStatistic() // 载入统计信息
+            })
+            .catch(err => {
+                this.haveErr = 'error happened'
+                console.log(err);
+                // 日记项目载入后，隐藏 preloading
+                document.querySelector('.preloading').style.display = 'none'
+            })
+
     },
     watch: {
         // 搜索按钮点击时，滚动到最顶部
@@ -148,24 +168,6 @@ export default {
                 }
             })
             this.SET_DATA_ARRAY_CATEGORY(data)
-        },
-        getCategoryAll() {
-            diaryApi
-                .categoryAllGet()
-                .then(res => {
-                    this.SET_CATEGORY_ALL(res.data)
-                })
-                .catch(err => {
-                    if (err.response.status == 401)
-                    {
-                        this.$router.push('/login')
-                    }
-                    else
-                    {
-                        this.haveErr = 'error happened'
-                        console.log(err);
-                    }
-                })
         },
     }
 }

@@ -13,9 +13,6 @@ export default {
         }
     },
     created() {
-        // 日记项目载入后，隐藏 preloading
-        document.querySelector('.preloading').style.display = 'none'
-
         if(window.matchMedia)
         {
             let colorSchemeMatch = window.matchMedia('(prefers-color-scheme: dark)')
@@ -36,7 +33,12 @@ export default {
         ...mapMutations(['SET_COLOR_MODE'])
     },
     errorCaptured(err, component, info) {
-        this.isServerError = 'error happened'
+        if(this.$route.name != 'Index')
+        {
+            this.$router.replace('/');
+            return false;
+        }
+        this.isServerError = 'unhandled error'
         console.log(`err ${err} happen for ${component?.name ?? "Unknown component"} : ${info}`)
         return false
     }

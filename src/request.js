@@ -1,7 +1,10 @@
 import axios from "axios";
 import utility from "./utility";
+import { useRouter } from "vue-router";
+
 const BASE_URL = '/portal/'
 
+const router = useRouter()
 
 function request(method, params, requestData = {}, url, timeout = 30000) {
 
@@ -49,6 +52,11 @@ function request(method, params, requestData = {}, url, timeout = 30000) {
             })
             .catch(err => {
                 if (err.response) {
+                    if (err.response.status == 401) {
+                        router.replace({name: "Login"})
+                        resolve(null)                       
+                        return
+                    }
                     console.log('response: ', err.response)
                 } else if (err.request) {
                     console.log('request: ', err.request)
