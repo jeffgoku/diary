@@ -4,8 +4,6 @@ import { useRouter } from "vue-router";
 
 const BASE_URL = '/portal/'
 
-const router = useRouter()
-
 function request(method, params, requestData = {}, url, timeout = 30000) {
 
     let headers = {}
@@ -53,6 +51,7 @@ function request(method, params, requestData = {}, url, timeout = 30000) {
             .catch(err => {
                 if (err.response) {
                     if (err.response.status == 401) {
+                        const router = useRouter()
                         router.replace({name: "Login"})
                         resolve(null)                       
                         return

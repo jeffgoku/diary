@@ -4,7 +4,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex"
-import ServerError from "./fundation/ServerError.vue";
+import ServerError from "@/fundation/ServerError.vue";
 export default {
     components: {ServerError},
     data(){
@@ -39,7 +39,7 @@ export default {
             return false;
         }
         this.isServerError = 'unhandled error'
-        console.log(`err ${err} happen for ${component?.name ?? "Unknown component"} : ${info}`)
+        console.log(`err ${err} happen for "${component?.$options.name ?? "Unknown component"}" : ${info}`)
         return false
     }
 }

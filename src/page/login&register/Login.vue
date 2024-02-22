@@ -46,6 +46,9 @@ import {mapState} from "vuex"
 import SvgIcons from "@/assets/img/SvgIcons"
 import projectConfig from "@/projectConfig";
 import packageInfo from "../../../package.json"
+
+import useLoading from "@/states/Loading"
+
 export default {
     name: "Login",
     data() {
@@ -65,6 +68,8 @@ export default {
     mounted() {
         this.show = true
         document.title = '日记 - 登录' // 变更标题
+        const loading = useLoading()
+        loading.value = false
     },
     computed: {
         ...mapState(['insets']),

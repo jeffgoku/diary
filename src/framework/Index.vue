@@ -32,6 +32,10 @@ import ServerError from "@/fundation/ServerError.vue"
 import utility from "@/utility"
 import diaryApi from "@/api/diaryApi"
 
+import useLoading from "@/states/Loading"
+
+const loading = useLoading()
+
 export default {
     name: 'Index',
     components: {
@@ -59,8 +63,8 @@ export default {
                     return;
                 }
                 this.SET_CATEGORY_ALL(res.data)
-                // 日记项目载入后，隐藏 preloading
-                document.querySelector('.preloading').style.display = 'none'
+
+                loading.value = false
 
                 // 初始化 LocalStorage 存储对象
                 let diaryConfig = utility.getDiaryConfig()
@@ -103,8 +107,8 @@ export default {
             .catch(err => {
                 this.haveErr = 'error happened'
                 console.log(err);
-                // 日记项目载入后，隐藏 preloading
-                document.querySelector('.preloading').style.display = 'none'
+                
+                loading.value = false;
             })
 
     },

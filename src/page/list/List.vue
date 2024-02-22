@@ -190,7 +190,7 @@ export default {
         ]),
         // 刷新 diaries show
         refreshDiariesShow(){
-            console.log('diaries changed')
+            // console.log('diaries changed')
             let tempShowArray = []
             if (this.diaries.length > 0) { // 在开始时，先把头问月份和第一个日记加到数组中
                 let lastDiary = this.diaries[0]
