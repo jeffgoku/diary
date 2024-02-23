@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 
 const app = createApp(App)
-app.use(store).use(router).mount('#app')
+app.use(store).use(router)
 
 
 // tooltip
@@ -42,3 +42,4 @@ Moment.locale('zh', {
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 app.component('Datepicker', Datepicker);
+app.mount('#app')

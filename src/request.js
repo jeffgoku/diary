@@ -1,6 +1,6 @@
 import axios from "axios";
 import utility from "./utility";
-import { useRouter } from "vue-router";
+import router from "@/router";
 
 const BASE_URL = '/portal/'
 
@@ -51,7 +51,6 @@ function request(method, params, requestData = {}, url, timeout = 30000) {
             .catch(err => {
                 if (err.response) {
                     if (err.response.status == 401) {
-                        const router = useRouter()
                         router.replace({name: "Login"})
                         resolve(null)                       
                         return

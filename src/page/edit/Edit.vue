@@ -493,10 +493,6 @@ export default {
         dayHasChanged(isToday){
             if (isToday){
                 this.getCurrentTemperature()
-            } else {
-                this.diary.temperature = ''
-                this.diary.temperatureOutside = ''
-                this.diary.weather = 'sunny'
             }
         },
 

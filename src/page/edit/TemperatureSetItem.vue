@@ -1,12 +1,12 @@
 <template>
-    <div :class="['temperature-set-item',{active: !!temperatureLocal}]">
+    <div :class="['temperature-set-item',{active: !!modelValue}]">
         <input placeholder="--"
                @keydown="keyPressed"
                @wheel="mouseWheelScrolled"
                class="temperature"
                name="temperature"
                id="temperature"
-               v-model="temperatureLocal"
+               v-model="temperature"
         >
         <div class="unit">{{unit}}</div>
     </div>
@@ -31,71 +31,82 @@ export default {
         }
     },
     emits: ['update:modelValue'],
-    mounted() {
-        this.$nextTick(_=> {
-            if (this.modelValue === ''){
-                this.temperatureLocal = ''
-            } else {
-                this.temperatureLocal = Number(this.modelValue)
-            }
-        })
+    /*
+    beforeUpdate () {
+        console.log(this.modelValue)
     },
-    data(){
-        return {
-            temperatureLocal: ''
+    */
+    computed: {
+        temperature: {
+            get() {
+                return this.modelValue;
+            },
+            set(v) {
+                if (isNaN(parseInt(v)))
+                {
+                    return
+                }
+                this.$emit('update:modelValue', v)
+            }
         }
     },
     methods: {
         mouseWheelScrolled(event){
             event.preventDefault()
-            if (this.temperatureLocal === ''){
-                this.temperatureLocal = 20 // 数值变化从 20 开始
+            let newTemp = this.modelValue
+            if (newTemp === ''){
+                newTemp = 20 // 数值变化从 20 开始
+            }
+            else
+            {
+                newTemp = Number(newTemp)
             }
             if (event.deltaY > 0){
-                this.temperatureLocal = this.temperatureLocal + 1
+                newTemp += 1
             } else {
-                this.temperatureLocal = this.temperatureLocal - 1
+                newTemp -= 1
             }
-            this.$emit('update:modelValue', String(this.temperatureLocal))
+            this.$emit('update:modelValue', String(newTemp))
         },
         keyPressed(event){
+            let newTemp = this.modelValue
             switch (event.key){
                 case 'ArrowUp':
-                    if (this.temperatureLocal === ''){
-                        this.temperatureLocal = 20 // 数值变化从 20 开始
+                    if (newTemp === ''){
+                        newTemp = 20 // 数值变化从 20 开始
+                    }
+                    else
+                    {
+                        newTemp = Number(newTemp)
                     }
                     if (event.metaKey || event.ctrlKey){
-                        this.temperatureLocal = this.temperatureLocal + 10
+                        newTemp += 10
                     } else {
-                        this.temperatureLocal = this.temperatureLocal + 1
+                        newTemp += 1
                     }
                     event.preventDefault()
                     break;
                 case 'ArrowDown':
-                    if (this.temperatureLocal === ''){
-                        this.temperatureLocal = 20 // 数值变化从 20 开始
+                    if (newTemp === ''){
+                        newTemp = 20 // 数值变化从 20 开始
+                    }
+                    else
+                    {
+                        newTemp = Number(newTemp)
                     }
                     if (event.metaKey || event.ctrlKey){
-                        this.temperatureLocal = this.temperatureLocal - 10
+                        newTemp -= 10
                     } else {
-                        this.temperatureLocal = this.temperatureLocal - 1
+                        newTemp -= 1
                     }
                     event.preventDefault()
                     break;
-                default: break
+                default:
+                    return;
             }
-            this.$emit('update:modelValue', String(this.temperatureLocal))
+            this.$emit('update:modelValue', String(newTemp))
         }
     },
-    watch:{
-        temperatureLocal(newValue){
-            if (isNaN(parseInt(newValue)))
-            {
-                return
-            }
-            this.$emit('update:modelValue', String(newValue))
-        }
-    }
 }
 </script>
 

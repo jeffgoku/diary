@@ -35,14 +35,9 @@ export default {
             default: new Date()
         }
     },
-    mounted() {
-        this.$nextTick(_=> {
-            this.dateLocal = this.modelValue
-        })
-    },
     data(){
         return {
-            dateLocal: new Date(),
+            dateLocal: this.modelValue,
             lunarObject: {
                 // Animal: "兔",
                 // IDayCn: "初十",
